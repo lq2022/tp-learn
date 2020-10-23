@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>短网址</title>
+</head>
+<body>
+		<input id="long_url" name="url" placeholder="请输入网址点击确认获取短网址">
+		<button type="submit" id="submit">确 认</button>
+		<p></p>
+</body>
+<script type="text/javascript" src="/static/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript">
+	$(function (argument) {
+		$('#submit').click(function(event) {
+			var long_url = $('#long_url').val();console.log(long_url)
+			if(long_url == ''){
+				alert(请输入网址)
+			}
+			$.ajax({
+				url: '/dwz',
+				type: 'post',
+				dataType: 'json',
+				data: {long_url: long_url},
+			})
+			.done(function(res) {
+				console.log("success");
+				if(res.code == 200){
+  					$('p').append('res.msg')
+				}else{
+					alert(res.msg)
+				}
+
+			})
+			.fail(function() {
+				console.log("error");
+			})
+			.always(function() {
+				console.log("complete");
+			});
+			
+		});
+	})
+</script>
+</html>

@@ -1,0 +1,107 @@
+   <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/echarts/3.6.1/echarts.min.js"></script>
+
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="box" style="width: 600px;height:400px;"></div>
+    <div id="box1" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('box'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '最近一周注册用户统计表'
+            },
+            tooltip: {},
+            legend: {
+                data:['注册量']
+            },
+            xAxis: {
+                data: [<?php echo $cday;?>]
+            },
+            yAxis: {},
+            series: [{
+                name: '注册量',
+                type: 'bar',
+                data: [<?php echo $num;?>] 
+            }]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+</script>
+      <script type="text/javascript">
+        var myChart = echarts.init(document.getElementById('box1'));
+        $.ajax({
+           url: '{:U('admin/syscount/regajax')}',
+                type: 'get',
+                dataType: 'json',
+                async: false
+        })
+        .done(function(data) {
+            num=[];
+            days=[];
+            for(i in data){
+                num.push(data[i].cn);
+                days.push(data[i].cday);
+            }
+            console.log(num);
+            console.log(days);
+            
+        })
+        var option = {
+            title: {
+                text: '最近一周注册用户统计表',
+                subtext: ''
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['注册量']
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: 'none'
+                    },
+                    dataView: {readOnly: false},
+                    magicType: {type: ['line', 'bar']},
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            xAxis:  {
+                type: 'category',
+                boundaryGap: false,
+                data: days
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value} °C'
+                }
+            },
+            series: [
+                {
+                    name:'最高气温',
+                    type:'line',
+                    data:num,
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                }
+            ]
+        };
+        myChart.setOption(option);
+</script>

@@ -1,0 +1,35 @@
+<div class="x-body">
+    <blockquote class="layui-elem-quote">
+        <img src="__ROOT__/<?php echo $user['face'] ?>" class="layui-circle" style="width:50px;float:left">
+        <dl style="margin-left:80px; color:#019688">
+        <dt><span ><?php echo $user['nickname'] ?></span> <span >飞吻：<?php echo $user['kiss'] ?></span></dt>
+        <dd style="margin-left:0"><?php if($user['sign']){echo $user['sign'];}else{echo '这家伙很懒,什么也没留下';} ?></dd>
+      </dl>
+    </blockquote>
+    <div class="pd-20">
+      <table  class="layui-table" lay-skin="line">
+        <tbody>
+          <tr>
+            <th  width="80">性别：</th>
+            <td><?php echo $user['sex'] ?></td>
+          </tr>
+          <tr>
+            <th>邮箱：</th>
+            <td><?php echo $user['email'] ?></td>
+          </tr>
+          <tr>
+            <th>地址：</th>
+            <td><?php echo $user['city'] ?></td>
+          </tr>
+          <tr>
+            <th>注册时间：</th>
+            <td><?php echo date("Y-m-d H:i:s",$user['create_time']) ?></td>
+          </tr>
+          <tr>
+            <th>飞吻：</th>
+            <td><?php echo $user['kiss'] ?></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+</div>

@@ -1,0 +1,194 @@
+<div class="x-nav">
+    <span class="layui-breadcrumb">
+        <a>
+            <cite>
+                首页
+            </cite>
+        </a>
+        <a>
+            <cite>
+                会员管理
+            </cite>
+        </a>
+        <a>
+            <cite>
+                评论列表
+            </cite>
+        </a>
+    </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+    href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">
+            ဂ
+        </i>
+    </a>
+</div>
+<div class="x-body">
+    <xblock>
+        <button class="layui-btn layui-btn-danger" onclick="delAll()">
+            <i class="layui-icon">
+                &#xe640;
+            </i>
+            批量删除
+        </button>
+        <span class="x-right" style="line-height:40px">
+            共有数据:<?php echo $count ?>条
+        </span>
+    </xblock>
+    <table class="layui-table">
+        <thead>
+            <tr>
+                <th>
+                    <input id="all" type="checkbox" name="" value="">
+                </th>
+                <th>
+                    ID
+                </th>
+                <th>
+                    回复者
+                </th>
+                <th>
+                    回复内容
+                </th>
+                <th>
+                    问题
+                </th>
+                <th>
+                    回复时间
+                </th>
+                <th>
+                    状态
+                </th>
+            </tr>
+        </thead>
+        <tbody id="x-link">
+            <?php foreach ($allData as $row) { ?>
+                <tr>
+                    <td>
+                        <input class="son" type="checkbox" value="1" name="">
+                    </td>
+                    <td>
+                        <?php echo $row[ 'id'] ?>
+                    </td>
+                    <td>
+                        <?php echo $row[ 'nickname'] ?>
+                    </td>
+                    <td>
+                        <?php echo $row[ 'content'] ?>
+                    </td>
+                    <td>
+                        <?php echo $row[ 'title'] ?>
+                    </td>
+                    <td>
+                        <?php echo date( 'Y/m/d H:i:s',$row[ 'create_time']) ?>
+                    </td>
+                    <td>
+                        <span class="layui-btn layui-btn-normal layui-btn-mini">
+                            <?php if($row[ 'status']==1){echo '被采纳';}else{echo '未采纳';} ?>
+                        </span>
+                    </td>
+                </tr>
+                <?php } ?>
+        </tbody>
+    </table>
+    <style type="text/css">
+                .laypage-main{
+                    border: 0px;
+                }
+                .laypage-main div{
+                    border: 0px;
+                }
+                .laypage-main .num{
+                    margin: 0px 10px;
+                    border: 1px solid #009E94;
+                    padding: 5px 10px;
+                }
+
+                .laypage-main .current{
+                    margin: 0px 10px;
+                    border: 1px solid #009E94;
+                    background: #009E94 url() 0 0 no-repeat;
+                    color: #fff;
+                    padding: 5px 10px;
+                }
+
+
+                .laypage-main .next,.laypage-main .prev,.laypage-main .end{
+                    margin: 0px 10px;
+                    border: 1px solid #009E94;
+                    padding: 5px 10px;
+                }
+            </style>
+    <div style="text-align: center">
+        <div class="laypage-main">
+            <?php echo $show ?>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['element', 'laypage', a 'layer', 'form'],
+    function() {
+        $ = layui.jquery; //jquery
+        lement = layui.element(); //面包导航
+        laypage = layui.laypage; //分页
+        layer = layui.layer; //弹出层
+        form = layui.form(); //弹出层
+        $('#all').click(function(event) {
+            if ($(this).prop('checked')) {
+                $('.son').prop('checked', true);
+            } else {
+                $('.son').prop('checked', false);
+            }
+
+        });
+
+    })
+    //批量删除提交
+    function delAll() {
+        layer.confirm('确认要删除吗？',
+        function(index) {
+            //捉到所有被选中的，发异步进行删除
+            data = '';
+            for (var i = 0; i < $('.son:checked').length; i++) {
+                data += $('.son:checked').eq(i).val() + ',';
+            };
+            consolo.log(data);
+            $.ajax({
+                url: '{:U('admin / common / delall ')}',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    aid: data
+                }
+            }).done(function(res) {
+                if (res.error == 1) {
+                    layer.msg(res.info, {
+                        icon: 1
+                    });
+                } else {
+
+                    layer.msg(res.info, {
+                        icon: 1
+                    });
+                    // location.reload();
+                    $('.son:checked').parents('tr').remove();
+
+                }
+            })
+
+        });
+    }
+
+    /*删除*/
+    function commemt_del(obj, id) {
+        layer.confirm('确认要删除吗？',
+        function(index) {
+            //发异步删除数据
+            $(obj).parents("tr").remove();
+            layer.msg('已删除!', {
+                icon: 1,
+                time: 1000
+            });
+        });
+    }
+</script>
